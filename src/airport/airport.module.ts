@@ -4,7 +4,7 @@ import { AirportService } from './airport.service';
 import { drizzleProvider } from 'src/drizzle/drizzle.provider';
 
 @Module({
-  controllers: [AirportController],
-  providers: [AirportService, ...drizzleProvider],
+    controllers: [AirportController],
+    providers: [AirportService, ...drizzleProvider],
 })
 export class AirportModule {}

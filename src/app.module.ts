@@ -6,12 +6,12 @@ import { DrizzleModule } from './drizzle/drizzle.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [
-    AirportModule,
-    DrizzleModule,
-    ConfigModule.forRoot({ envFilePath: '.env' }),
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        AirportModule,
+        DrizzleModule,
+        ConfigModule.forRoot({ envFilePath: '.env' }),
+    ],
+    controllers: [AppController],
+    providers: [AppService],
 })
 export class AppModule {}

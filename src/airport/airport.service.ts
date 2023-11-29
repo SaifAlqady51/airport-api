@@ -7,40 +7,42 @@ import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class AirportService {
-  constructor(
-    @Inject(DrizzleProvider) private db: PostgresJsDatabase<typeof schema>,
-  ) {}
+    constructor(
+        @Inject(DrizzleProvider)
+        private db: PostgresJsDatabase<typeof schema>,
+    ) {}
 
-  async getAirportByCode(airportCode: string) {
-    const chosenAirport = await this.db.select({
-        airportName:schema.airports.airportName,
-        cityName: schema.airports.cityName,
-        countryName: schema.airports.countryName
-    })
-    .from(schema.airports)
-    .where(eq(schema.airports.airportCode,airportCode))
-    return chosenAirport[0];
-  }
+    async getAirportByCode(airportCode: string) {
+        const chosenAirport = await this.db
+            .select({
+                airportName: schema.airports.airportName,
+                cityName: schema.airports.cityName,
+                countryName: schema.airports.countryName,
+            })
+            .from(schema.airports)
+            .where(eq(schema.airports.airportCode, airportCode));
+        return chosenAirport[0];
+    }
 
-  async getAllAirportsInCity(cityName: string) {
-    // const allAirportsInCity = await this.db.query.airports.findMany({
-    //     where:eq(schema.airports.cityName,cityName)
-    // })
-    // return allAirportsInCity
-    const allAirportsInCity = await this.db
-      .select({
-        airportName: schema.airports.airportName,
-        airportCode: schema.airports.airportCode,
-      })
-      .from(schema.airports)
-      .where(eq(schema.airports.cityName, cityName));
+    async getAllAirportsInCity(cityName: string) {
+        // const allAirportsInCity = await this.db.query.airports.findMany({
+        //     where:eq(schema.airports.cityName,cityName)
+        // })
+        // return allAirportsInCity
+        const allAirportsInCity = await this.db
+            .select({
+                airportName: schema.airports.airportName,
+                airportCode: schema.airports.airportCode,
+            })
+            .from(schema.airports)
+            .where(eq(schema.airports.cityName, cityName));
 
-    return allAirportsInCity;
-  }
+        return allAirportsInCity;
+    }
 
-  async setAirports(dto: CreateAirportDto) {
-    const insertedAirport = await this.db.insert(schema.airports).values({
-      ...dto,
-    });
-  }
+    async setAirports(dto: CreateAirportDto) {
+        const insertedAirport = await this.db.insert(schema.airports).values({
+            ...dto,
+        });
+    }
 }

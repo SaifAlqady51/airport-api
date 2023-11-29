@@ -1,35 +1,47 @@
 import {
-  Body,
-  Controller,
-  Get,
-  NotFoundException,
-  Param,
-  Post,
-  Query,
+    Body,
+    Controller,
+    Get,
+    HttpException,
+    HttpStatus,
+    NotFoundException,
+    Param,
+    Post,
+    Query,
 } from '@nestjs/common';
 import { CreateAirportDto } from './dto/create-airport.dto';
 import { AirportService } from './airport.service';
 
 @Controller('api/airport')
 export class AirportController {
-  constructor(private readonly airportService: AirportService) {}
+    constructor(private readonly airportService: AirportService) {}
 
-  @Get()
-  getSingleData(
-    @Query('airportCode') airportCode?: string,
-    @Query('cityName') cityName?: string,
-  ) {
-    if (cityName) {
-      return this.airportService.getAllAirportsInCity(cityName);
+    @Get('get/airportName')
+    getAirportName(@Query('airportCode') airportCode: string) {
+        if (airportCode) {
+            return this.airportService.getAirportByCode(airportCode);
+        } else {
+            throw new HttpException(
+                'not provided query ',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
     }
-    if (airportCode) {
-      return this.airportService.getAirportByCode(airportCode);
+
+    @Get('get/airportsList')
+    getData(@Query('cityName') cityName?: string) {
+        if (cityName) {
+            return this.airportService.getAllAirportsInCity(cityName);
+        } else {
+            throw new HttpException(
+                'not provided query',
+                HttpStatus.BAD_REQUEST,
+            );
+        }
     }
-  }
 
-  @Post()
-  createAirport(@Body() createAirportDto: CreateAirportDto) {
-    return this.airportService.setAirports(createAirportDto);
-  }
-
+    @Post()
+    createAirport(@Body() createAirportDto: CreateAirportDto) {
+        return this.airportService.setAirports(createAirportDto);
+    }
 }
