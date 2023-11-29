@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { CreateAirportDto } from './dto/create-airport.dto';
 import { AirportService } from './airport.service';
-import { airportsList } from '../../IATACode.js';
 
 @Controller('api/airport')
 export class AirportController {
