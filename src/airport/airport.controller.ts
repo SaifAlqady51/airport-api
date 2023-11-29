@@ -16,6 +16,23 @@ import { AirportService } from './airport.service';
 export class AirportController {
     constructor(private readonly airportService: AirportService) {}
 
+    @Get()
+    helloAirport() {
+        return {
+            message: 'Welcome to airport api',
+            routes: {
+                airportName: {
+                    route: '~/get/airportName',
+                    queries: '?airportCode',
+                },
+                airportsList: {
+                    route: '~/get/airportsList',
+                    queries: '?airportName',
+                },
+            },
+        };
+    }
+
     @Get('get/airportName')
     getAirportName(@Query('airportCode') airportCode: string) {
         if (airportCode) {

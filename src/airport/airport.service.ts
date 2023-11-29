@@ -1,4 +1,10 @@
-import { Get, Inject, Injectable } from '@nestjs/common';
+import {
+    Get,
+    HttpException,
+    HttpStatus,
+    Inject,
+    Injectable,
+} from '@nestjs/common';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { DrizzleProvider } from 'src/drizzle/drizzle.provider';
 import * as schema from 'src/drizzle/schema';
@@ -21,14 +27,14 @@ export class AirportService {
             })
             .from(schema.airports)
             .where(eq(schema.airports.airportCode, airportCode));
-        return chosenAirport[0];
+        if (chosenAirport.length >= 1) {
+            return chosenAirport[0];
+        } else {
+            throw new HttpException('Airport not found', HttpStatus.BAD_REQUEST);
+        }
     }
 
     async getAllAirportsInCity(cityName: string) {
-        // const allAirportsInCity = await this.db.query.airports.findMany({
-        //     where:eq(schema.airports.cityName,cityName)
-        // })
-        // return allAirportsInCity
         const allAirportsInCity = await this.db
             .select({
                 airportName: schema.airports.airportName,
@@ -36,8 +42,8 @@ export class AirportService {
             })
             .from(schema.airports)
             .where(eq(schema.airports.cityName, cityName));
-
-        return allAirportsInCity;
+        if(allAirportsInCity.length >= 1) return allAirportsInCity;
+        else throw new HttpException('city has no international airports', HttpStatus.BAD_REQUEST)
     }
 
     async setAirports(dto: CreateAirportDto) {
