@@ -30,7 +30,10 @@ export class AirportService {
         if (chosenAirport.length >= 1) {
             return chosenAirport[0];
         } else {
-            throw new HttpException('Airport not found', HttpStatus.BAD_REQUEST);
+            throw new HttpException(
+                'Airport not found',
+                HttpStatus.BAD_REQUEST,
+            );
         }
     }
 
@@ -42,8 +45,12 @@ export class AirportService {
             })
             .from(schema.airports)
             .where(eq(schema.airports.cityName, cityName));
-        if(allAirportsInCity.length >= 1) return allAirportsInCity;
-        else throw new HttpException('city has no international airports', HttpStatus.BAD_REQUEST)
+        if (allAirportsInCity.length >= 1) return allAirportsInCity;
+        else
+            throw new HttpException(
+                'city has no international airports',
+                HttpStatus.BAD_REQUEST,
+            );
     }
 
     async setAirports(dto: CreateAirportDto) {
