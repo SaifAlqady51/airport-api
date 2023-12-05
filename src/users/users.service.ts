@@ -20,7 +20,6 @@ export class UsersService {
             .from(schema.users)
             .where(eq(schema.users.email, userEamil));
         if (ifUserExists.length === 1) {
-            console.log(ifUserExists[0]);
             return ifUserExists[0];
         } else {
             throw new HttpException('user not found', HttpStatus.NOT_FOUND);

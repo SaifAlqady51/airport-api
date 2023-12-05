@@ -22,9 +22,16 @@ export class UsersController {
     @Post('login')
     async logIn(@Body(new ValidationPipe()) findUserDto: FindUserDto) {
         const user = await this.userService.logIn(findUserDto.email);
-        const comparePassword = await bcrypt.compare(findUserDto.password, user.password)
+        const comparePassword = await bcrypt.compare(
+            findUserDto.password,
+            user.password,
+        );
         if (comparePassword) {
-            return user;
+            return {
+                name: user.name,
+                email: user.email,
+                subcription: user.subscription,
+            };
         }
         throw new HttpException(
             'password is not correct',
@@ -34,14 +41,13 @@ export class UsersController {
     @Post('register')
     async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
         const hashingPassword = await encrypt(createUserDto.password);
-        console.log(hashingPassword)
-        const editedDto = {...createUserDto, password: hashingPassword}
-        console.log(editedDto)
+        const editedDto = { ...createUserDto, password: hashingPassword };
 
         const createdUser = await this.userService.register({
             ...createUserDto,
-            password:hashingPassword
+            password: hashingPassword,
         });
-    }
 
+        
+    }
 }
