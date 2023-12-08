@@ -13,25 +13,38 @@ export class UsersService {
         private db: PostgresJsDatabase<typeof schema>,
     ) {}
 
-    // login Service
-    async logIn(userEamil: string) {
-        const ifUserExists = await this.db
+    async checkEmailExists(userEmail: string) {
+        const userExists = await this.db
             .select()
             .from(schema.users)
-            .where(eq(schema.users.email, userEamil));
+            .where(eq(schema.users.email, userEmail));
+
+        return userExists[0]
+    }
+
+    // login Service
+    async logIn(userEamil: string) {
+
+        const ifUserExists = await this.checkEmailExists(userEamil)
 
         // if that user exists in your database
-        if (ifUserExists.length === 1) {
+        if (ifUserExists) {
             return ifUserExists[0];
 
             // user not found error
         } else {
-            throw new HttpException('user not found', HttpStatus.NOT_FOUND);
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         }
     }
 
     // register Service
     async register(createdUser: CreateUserDto) {
+
+        const ifEmailExsits = await this.checkEmailExists(createdUser.email)
+
+        if(ifEmailExsits){
+            throw new HttpException('Email has been already used', HttpStatus.CONFLICT)
+        }
         // create the user
         const user = await this.db
             .insert(schema.users)

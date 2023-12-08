@@ -40,7 +40,7 @@ export class UsersController {
         }
         // Error when password is not correct
         throw new HttpException(
-            'password is not correct',
+            'Password is not correct',
             HttpStatus.UNAUTHORIZED,
         );
     }
@@ -56,5 +56,6 @@ export class UsersController {
             ...createUserDto,
             password: hashedPassword,
         });
+        return createdUser;
     }
 }
