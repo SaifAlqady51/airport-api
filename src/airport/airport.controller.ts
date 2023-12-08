@@ -16,6 +16,7 @@ import { AirportService } from './airport.service';
 export class AirportController {
     constructor(private readonly airportService: AirportService) {}
 
+    // info endpoint
     @Get()
     helloAirport() {
         return {
@@ -33,25 +34,33 @@ export class AirportController {
         };
     }
 
+    // get airport name from airport code endpoint
     @Get('get/airportName')
     getAirportName(@Query('airportCode') airportCode: string) {
+        // if airport Code is passed
         if (airportCode) {
+            // return the airport info
             return this.airportService.getAirportByCode(airportCode);
+            // Error if the airportCode not passed
         } else {
             throw new HttpException(
-                'not provided query ',
+                'not provided query, Provided query => ?airportCode={}',
                 HttpStatus.BAD_REQUEST,
             );
         }
     }
 
+    // get airport List in specific city by passing the city name
     @Get('get/airportsList')
     getData(@Query('cityName') cityName?: string) {
+        //if city name is passed
         if (cityName) {
+            // return list of airpots in this city
             return this.airportService.getAllAirportsInCity(cityName);
+            // if cityName is not passed
         } else {
             throw new HttpException(
-                'not provided query',
+                'not provided query, provided query => ?cityName={}',
                 HttpStatus.BAD_REQUEST,
             );
         }
