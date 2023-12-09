@@ -18,6 +18,21 @@ import { encrypt } from './utils/encrypt';
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
+    // check email endpoint
+    @Post('check-email-existence')
+    async chekcEmail(@Body() email:string){
+        // check if email exists in database
+        const emailExistence = this.userService.checkEmailExists(email)
+
+        if(emailExistence){
+            // return acception http response if email is not used
+            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
+        }
+        
+        throw new HttpException('email is used before', HttpStatus.CONFLICT)
+
+    }
+
     // login in endpoint
     @Post('login')
     async logIn(@Body(new ValidationPipe()) findUserDto: FindUserDto) {
@@ -45,9 +60,12 @@ export class UsersController {
         );
     }
 
+
     // regiseter endpoint
     @Post('register')
     async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+
+
         // hashing the password
         const hashedPassword = await encrypt(createUserDto.password);
 

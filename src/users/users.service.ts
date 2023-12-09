@@ -42,11 +42,6 @@ export class UsersService {
     // register Service
     async register(createdUser: CreateUserDto) {
 
-        const ifEmailExsits = await this.checkEmailExists(createdUser.email)
-
-        if(ifEmailExsits){
-            throw new HttpException('Email has been already used', HttpStatus.CONFLICT)
-        }
         // create the user
         const user = await this.db
             .insert(schema.users)
