@@ -27,9 +27,11 @@ export class UsersService {
 
         const ifUserExists = await this.checkEmailExists(userEamil)
 
+
+
         // if that user exists in your database
         if (ifUserExists) {
-            return ifUserExists[0];
+            return ifUserExists;
 
             // user not found error
         } else {

@@ -23,8 +23,8 @@ export class UsersController {
     async logIn(@Body(new ValidationPipe()) findUserDto: FindUserDto) {
         // get the user from database if exists
         const user = await this.userService.logIn(findUserDto.email);
-
         // compare the encrypted password in database with the the password in post request body
+        
         const comparePassword = await bcrypt.compare(
             findUserDto.password,
             user.password,
