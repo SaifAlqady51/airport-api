@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { FindUserDto } from './dto/find-user.dto';
 import * as bcrypt from 'bcrypt';
 import { encrypt } from './utils/encrypt';
+import { CheckEmailDto } from './dto/chekEmail-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -20,16 +21,17 @@ export class UsersController {
 
     // check email endpoint
     @Post('check-email-existence')
-    async chekcEmail(@Body() email:string){
+    async chekcEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
         // check if email exists in database
-        const emailExistence = this.userService.checkEmailExists(email)
+        const emailExistence = await this.userService.checkEmailExists(checkEmailDto.email)
 
         if(emailExistence){
             // return acception http response if email is not used
-            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
+
+            throw new HttpException('email is used before', HttpStatus.CONFLICT)
         }
-        
-        throw new HttpException('email is used before', HttpStatus.CONFLICT)
+            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
+
 
     }
 
