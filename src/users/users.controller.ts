@@ -14,26 +14,13 @@ import { FindUserDto } from './dto/find-user.dto';
 import * as bcrypt from 'bcrypt';
 import { encrypt } from './utils/encrypt';
 import { CheckEmailDto } from './dto/chekEmail-user.dto';
+import sendMail from './utils/sendMail';
+import { getRandomNumber } from './utils/generateRandom';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-    // check email endpoint
-    @Post('check-email-existence')
-    async chekcEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
-        // check if email exists in database
-        const emailExistence = await this.userService.checkEmailExists(checkEmailDto.email)
-
-        if(emailExistence){
-            // return acception http response if email is not used
-
-            throw new HttpException('email is used before', HttpStatus.CONFLICT)
-        }
-            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
-
-
-    }
 
     // login in endpoint
     @Post('login')
@@ -77,5 +64,29 @@ export class UsersController {
             password: hashedPassword,
         });
         return createdUser;
+    }
+    
+    // check email endpoint
+    @Post('check-email-existence')
+    async chekcEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
+        // check if email exists in database
+        const emailExistence = await this.userService.checkEmailExists(checkEmailDto.email)
+
+        if(emailExistence){
+            // return acception http response if email is not used
+
+            throw new HttpException('email is used before', HttpStatus.CONFLICT)
+        }
+            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
+    }
+
+    @Post('send-validation-email')
+    async sendEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
+        const randomNumber = getRandomNumber()
+
+        const encryptNumber = await encrypt(randomNumber.toString())
+        await sendMail(checkEmailDto.email,randomNumber)
+
+        throw new HttpException({message: "Message sent to your email", randomNumber: encryptNumber},HttpStatus.OK)
     }
 }
