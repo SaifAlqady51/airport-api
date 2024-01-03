@@ -28,7 +28,7 @@ export class AirportController {
                 },
                 airportsList: {
                     route: '~/get/airportsList',
-                    queries: '?airportName',
+                    queries: '?cityName',
                 },
             },
         };
