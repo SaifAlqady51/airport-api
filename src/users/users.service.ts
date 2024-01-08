@@ -4,6 +4,7 @@ import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import * as schema from 'src/drizzle/schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { eq } from 'drizzle-orm';
+import { generateToken } from './utils/generateToken';
 
 @Injectable()
 export class UsersService {
@@ -39,13 +40,14 @@ export class UsersService {
         }
     }
 
+
     // register Service
     async register(createdUser: CreateUserDto) {
 
         // create the user
         const user = await this.db
             .insert(schema.users)
-            .values({ ...createdUser })
+            .values({ ...createdUser ,token:generateToken()})
             .returning();
 
         return user;

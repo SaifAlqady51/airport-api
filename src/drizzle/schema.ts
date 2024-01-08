@@ -14,4 +14,5 @@ export const users = pgTable('users', {
     email: varchar('email').unique().primaryKey(),
     password: varchar('password'),
     subscription: varchar('subscription'),
+    token: varchar('token'),
 });
