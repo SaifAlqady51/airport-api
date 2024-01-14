@@ -1,10 +1,4 @@
-import {
-    Get,
-    HttpException,
-    HttpStatus,
-    Inject,
-    Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { DrizzleProvider } from 'src/drizzle/drizzle.provider';
 import * as schema from 'src/drizzle/schema';
@@ -57,5 +51,6 @@ export class AirportService {
         const insertedAirport = await this.db.insert(schema.airports).values({
             ...dto,
         });
+        return insertedAirport;
     }
 }

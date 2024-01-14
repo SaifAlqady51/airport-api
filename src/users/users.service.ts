@@ -20,15 +20,12 @@ export class UsersService {
             .from(schema.users)
             .where(eq(schema.users.email, userEmail));
 
-        return userExists[0]
+        return userExists[0];
     }
 
     // login Service
     async logIn(userEamil: string) {
-
-        const ifUserExists = await this.checkEmailExists(userEamil)
-
-
+        const ifUserExists = await this.checkEmailExists(userEamil);
 
         // if that user exists in your database
         if (ifUserExists) {
@@ -40,14 +37,12 @@ export class UsersService {
         }
     }
 
-
     // register Service
     async register(createdUser: CreateUserDto) {
-
         // create the user
         const user = await this.db
             .insert(schema.users)
-            .values({ ...createdUser ,token:generateToken()})
+            .values({ ...createdUser, token: generateToken() })
             .returning();
 
         return user;

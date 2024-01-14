@@ -9,4 +9,4 @@ export const MessageContent = `
                     <h2 style="margin:auto 5px">your security code is :</h2>
                     <h1 style="margin:auto 5px">{{randomNumber}}</h1>
     </div>
-`
+`;

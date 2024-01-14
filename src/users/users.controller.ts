@@ -1,11 +1,9 @@
 import {
     Body,
     Controller,
-    Get,
     HttpException,
     HttpStatus,
     Post,
-    Res,
     ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -21,14 +19,13 @@ import { getRandomNumber } from './utils/generateRandom';
 export class UsersController {
     constructor(private readonly userService: UsersService) {}
 
-
     // login in endpoint
     @Post('login')
     async logIn(@Body(new ValidationPipe()) findUserDto: FindUserDto) {
         // get the user from database if exists
         const user = await this.userService.logIn(findUserDto.email);
         // compare the encrypted password in database with the the password in post request body
-        
+
         const comparePassword = await bcrypt.compare(
             findUserDto.password,
             user.password,
@@ -49,12 +46,9 @@ export class UsersController {
         );
     }
 
-
     // regiseter endpoint
     @Post('register')
     async register(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
-
-
         // hashing the password
         const hashedPassword = await encrypt(createUserDto.password);
 
@@ -65,28 +59,42 @@ export class UsersController {
         });
         return createdUser;
     }
-    
+
     // check email endpoint
     @Post('check-email-existence')
-    async chekcEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
+    async chekcEmail(@Body(new ValidationPipe()) checkEmailDto: CheckEmailDto) {
         // check if email exists in database
-        const emailExistence = await this.userService.checkEmailExists(checkEmailDto.email)
+        const emailExistence = await this.userService.checkEmailExists(
+            checkEmailDto.email,
+        );
 
-        if(emailExistence){
+        if (emailExistence) {
             // return acception http response if email is not used
 
-            throw new HttpException('email is used before', HttpStatus.CONFLICT)
+            throw new HttpException(
+                'email is used before',
+                HttpStatus.CONFLICT,
+            );
         }
-            throw new HttpException('email is not used before',HttpStatus.ACCEPTED)
+        throw new HttpException(
+            'email is not used before',
+            HttpStatus.ACCEPTED,
+        );
     }
 
     @Post('send-validation-email')
-    async sendEmail(@Body(new ValidationPipe) checkEmailDto: CheckEmailDto){
-        const randomNumber = getRandomNumber()
+    async sendEmail(@Body(new ValidationPipe()) checkEmailDto: CheckEmailDto) {
+        const randomNumber = getRandomNumber();
 
-        const encryptNumber = await encrypt(randomNumber.toString())
-        await sendMail(checkEmailDto.email,randomNumber)
+        const encryptNumber = await encrypt(randomNumber.toString());
+        await sendMail(checkEmailDto.email, randomNumber);
 
-        throw new HttpException({message: "Message sent to your email", randomNumber: encryptNumber},HttpStatus.OK)
+        throw new HttpException(
+            {
+                message: 'Message sent to your email',
+                randomNumber: encryptNumber,
+            },
+            HttpStatus.OK,
+        );
     }
 }

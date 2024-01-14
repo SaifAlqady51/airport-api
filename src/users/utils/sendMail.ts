@@ -12,11 +12,10 @@ const sendMail = async (to: string, randomNumber: number) => {
     });
 
     try {
-        const testResult = await transport.verify();
+        await transport.verify();
     } catch (error) {
         return;
     }
-
 
     const template = handlebars.compile(MessageContent);
 
