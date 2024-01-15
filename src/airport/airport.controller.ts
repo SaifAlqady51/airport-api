@@ -18,7 +18,7 @@ export class AirportController {
     @Get()
     helloAirport() {
         return {
-            message: 'Welcome to airport api',
+            message: 'Welcome to airport api version 1',
             routes: {
                 airportName: {
                     route: '~/get/airportName',
