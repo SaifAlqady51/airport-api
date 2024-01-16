@@ -2,7 +2,9 @@ import * as nodemailer from 'nodemailer';
 import * as handlebars from 'handlebars';
 import { MessageContent } from './messageContent';
 
+
 const sendMail = async (to: string, randomNumber: number) => {
+    // use nodemailer to create an email sent by gmail
     const transport = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -16,7 +18,7 @@ const sendMail = async (to: string, randomNumber: number) => {
     } catch (error) {
         return;
     }
-
+    // customed Message for code email
     const template = handlebars.compile(MessageContent);
 
     try {
