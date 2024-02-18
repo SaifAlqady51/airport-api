@@ -13,6 +13,7 @@ export class AirportService {
     ) {}
 
     async getAirportByCode(airportCode: string) {
+        try{
         const chosenAirport = await this.db
             .select({
                 airportName: schema.airports.airportName,
@@ -29,6 +30,10 @@ export class AirportService {
                 HttpStatus.BAD_REQUEST,
             );
         }
+    }
+    catch(error){
+        console.log('cannot connect to database' + error)
+    }
     }
 
     async getAllAirportsInCity(cityName: string) {
