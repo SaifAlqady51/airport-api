@@ -34,10 +34,13 @@ export class AirportController {
 
     // get airport name from airport code endpoint
     @Get('get/airportName')
-    getAirportName(@Query('airportCode') airportCode: string) {
+    async getAirportName(@Query('airportCode') airportCode: string) {
         // if airport Code is passed
         if (airportCode) {
             // return the airport info
+            const airportName = await this.airportService.getAirportByCode(airportCode)
+            console.log(airportCode)
+
             return this.airportService.getAirportByCode(airportCode);
             // Error if the airportCode not passed
         } else {
