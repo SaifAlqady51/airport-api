@@ -7,9 +7,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
-import { join } from 'path';
 import { AppResolver } from './app.resolver';
-import { UserResolver } from './users/user.resolver';
+import { UsersResolver } from './users/user.resolver';
+import { UsersService } from './users/users.service';
 
 @Module({
   imports: [
@@ -22,7 +22,6 @@ import { UserResolver } from './users/user.resolver';
     ConfigModule.forRoot({ envFilePath: '.env' }),
     UsersModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, AppResolver, UserResolver],
+  providers: [AppService, UsersResolver],
 })
 export class AppModule { }

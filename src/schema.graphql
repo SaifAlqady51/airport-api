@@ -1,11 +1,33 @@
-type Query {
-    hello: String
-    users: [User]
-    getNumber: Int
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    subscription: String!
 }
 
-type User {
-    id: Int
-    name: String
-    email: String
+input CreateUserInput {
+    name: String!
+    email: String!
+    password: String!
+    subscription: String!
+}
+
+input FindUserInput {
+    email: String!
+    password: String!
+}
+
+input CheckEmailInput {
+    email: String!
+}
+
+type Query {
+    _: Boolean
+}
+
+type Mutation {
+    logIn(findUserInput: FindUserInput!): User
+    register(createUserInput: CreateUserInput!): User
+    checkEmail(checkEmailInput: CheckEmailInput!): Boolean
+    sendEmail(checkEmailInput: CheckEmailInput!): String
 }
